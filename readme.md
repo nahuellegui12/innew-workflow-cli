@@ -18,12 +18,12 @@ CLI para estandarizar el flujo de trabajo en proyectos **VTEX IO**:
 ## ⬇️ Clonar y preparar el repo
 
 ```bash
-git clone https://github.com/tu-org/innew-workflow-cli.git
+git clone https://github.com/nahuellegui12/innew-workflow-cli.git
 cd innew-workflow-cli
 npm install
 ```
 
 ## ⬇️ instalacion de manera local
 ```bash
-npm init
+npm link
 ```
