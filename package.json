@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "innew": "./bin/innew.js"
+    "innew": "bin/innew.js"
   },
   "files": [
     "bin/",
