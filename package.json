@@ -1,10 +1,14 @@
 {
-  "name": "@innew/workflow-cli",
+  "name": "innew-cli",
   "version": "0.1.0",
   "type": "module",
   "bin": {
     "innew": "./bin/innew.js"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [ "bin/", "src/", "package.json", "README.md", "LICENSE" ],
   "description": "CLI para estandarizar branch + workspace VTEX.",
   "license": "MIT",
   "engines": { "node": ">=18" },
