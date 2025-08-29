@@ -3,9 +3,9 @@ import inquirer from 'inquirer';
 import { execa } from 'execa';
 import chalk from 'chalk';
 
-// --- Config opcional por archivo .innewrc ---
 import fs from 'fs';
 import path from 'path';
+
 const rcPath = path.join(process.cwd(), '.innewrc.json');
 let rc = {};
 if (fs.existsSync(rcPath)) {
@@ -18,7 +18,7 @@ const sanitizeDesc = (s) =>
   stripDiacritics(s)
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9-]/g, '-') // letras, números y -
+    .replace(/[^a-z0-9-]/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
 
@@ -35,20 +35,16 @@ async function ensureCmd(cmd, args = ['--version']) {
 
 async function gitCheckoutNew(branch) {
   try {
-    // ¿existe localmente?
     const { stdout } = await execa('git', ['branch', '--list', branch]);
     if (!stdout.trim()) {
-      // crea y cambia a la branch local
       await execa('git', ['checkout', '-b', branch], { stdio: 'inherit' });
       console.log(chalk.green(`✔ Branch local creada: ${branch}`));
     } else {
-      // ya existe local, solo hacer checkout
       await execa('git', ['checkout', branch], { stdio: 'inherit' });
       console.log(chalk.yellow(`✔ Branch local ya existía: ${branch}`));
     }
 
-    // IMPORTANTE: no setea upstream ni hace push
-    console.log(chalk.gray('↪ No se realizó push al remoto (modo solo local).'));
+    console.log(chalk.gray('No se realizó push al remoto.'));
   } catch (e) {
     throw new Error(`Git error: ${e.shortMessage || e.message}`);
   }
@@ -67,7 +63,7 @@ async function vtexCreateAndUseWorkspace(workspace) {
     const { stdout } = await execa('vtex', ['workspace', 'list']);
     exists = stdout.split('\n').some(line => line.split(/\s+/)[0] === workspace);
   } catch {
-    // Seguimos igual; si list falla, intentamos crear.
+
   }
 
   if (!exists) {
