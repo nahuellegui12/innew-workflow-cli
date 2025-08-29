@@ -1,0 +1,22 @@
+{
+  "name": "@innew/workflow-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "innew": "./bin/innew.js"
+  },
+  "description": "CLI para estandarizar branch + workspace VTEX.",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "execa": "^9.3.0",
+    "inquirer": "^9.3.0"
+  },
+  "scripts": {
+    "dev": "node ./bin/innew.js vtex workflow init",
+    "build": "echo 'No build step needed'",
+    "test": "node ./bin/innew.js --help"
+  }
+}
