@@ -28,7 +28,11 @@ npm install
 npm init
 ```
 
-## ⬇️ Instalar de paquete npm
+## ⬇️ Instalar de paquete NPM
+```bash
 npm i -g innew-cli
-## o sin instalar
+
+O sin instalar
 npx -y -p innew-cli innew --help
+```
+
