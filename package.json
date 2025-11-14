@@ -40,8 +40,9 @@
     "inquirer": "^9.3.0"
   },
   "scripts": {
-    "dev": "node ./bin/innew.js vtex workflow init",
     "build": "echo 'No build step needed'",
-    "test": "node ./bin/innew.js --help"
+    "test": "node ./bin/innew.js --help",
+    "dev": "node ./bin/innew.js init",
+    "branch": "node ./bin/innew.js branch"
   }
 }

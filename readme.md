@@ -35,4 +35,7 @@ npm i -g innew-cli
 O sin instalar
 npx -y -p innew-cli innew --help
 ```
-
+npm unlink -g innew-cli
+rm -rf node_modules package-lock.json
+npm install
+npm link
