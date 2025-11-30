@@ -2,11 +2,12 @@
 import { Command } from 'commander'
 import runInit from '../src/init.js'
 import runBranch from '../src/branch.js'
+import runCommit from '../src/commit.js'
 
 const program = new Command()
   .name('innew')
-  .description('CLI: estandariza branches y workspaces VTEX')
-  .version('1.2.0')
+  .description('CLI: estandariza branches, workspaces VTEX y commits')
+  .version('1.3.0')
 
 program
   .command('init')
@@ -24,5 +25,12 @@ program
   .option('--show', 'Solo listar, sin cambiar nada')
   .option('--all', 'Usar historial GLOBAL en vez del repo actual')
   .action(runBranch)
+
+program
+  .command('commit')
+  .description('Crea un commit formateado usando el contexto de la branch actual')
+  .option('-t, --type <type>', 'feat|fix|refactor|style|docs|test|chore')
+  .option('-m, --message <message>', 'Descripción del cambio')
+  .action(runCommit)
 
 program.parse(process.argv)

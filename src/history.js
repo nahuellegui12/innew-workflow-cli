@@ -47,7 +47,6 @@ export function writeHistoryRaw (list) {
 export async function addHistoryEntry ({ branch, workspace, date = new Date().toISOString() }) {
   const repo = await getRepoRoot()
   const list = readHistoryRaw()
-  // evitar duplicado exacto adyacente (branch+workspace+repo)
   const filtered = list.filter(e => !(e.branch === branch && e.workspace === workspace && e.repo === repo))
   const next = [{ branch, workspace, date, repo }, ...filtered].slice(0, MAX_ENTRIES)
   writeHistoryRaw(next)
@@ -61,7 +60,6 @@ export async function getRecent (n = 3, { scope = 'repo' } = {}) {
   return byRepo.slice(0, n)
 }
 
-// Migración desde .innew-history.json local del repo (si existiera)
 export function migrateLegacyRepoFile () {
   const legacyPath = path.join(process.cwd(), '.innew-history.json')
   if (!fs.existsSync(legacyPath)) return
