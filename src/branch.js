@@ -1,4 +1,4 @@
-import inquirer from 'inquirer'
+import { select } from '@inquirer/prompts'
 import chalk from 'chalk'
 import {
     ensureCmd,
@@ -29,20 +29,14 @@ export default async function runBranch(opts = {}) {
     if (opts.last) {
         chosen = recent[0]
     } else {
-        // console.log('\nSeleccioná una branch reciente:\n')
-
-        const { selectedBranch } = await inquirer.prompt([
-            {
-                name: 'selectedBranch',
-                type: 'list',
-                message: 'Seleccioná una branch reciente:',
-                pageSize: 5,
-                choices: recent.map((r, idx) => ({
-                    name: `${chalk.cyan(r.branch)}  ${chalk.gray(`(${r.workspace})`)}  – ${chalk.dim(new Date(r.date).toLocaleString())}`,
-                    value: idx
-                }))
-            }
-        ])
+        const selectedBranch = await select({
+            message: 'Seleccioná una branch reciente:',
+            pageSize: 5,
+            choices: recent.map((r, idx) => ({
+                name: `${chalk.cyan(r.branch)}  ${chalk.gray(`(${r.workspace})`)}  – ${chalk.dim(new Date(r.date).toLocaleString())}`,
+                value: idx
+            }))
+        })
         chosen = recent[selectedBranch]
     }
 

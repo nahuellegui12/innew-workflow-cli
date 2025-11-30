@@ -1,4 +1,3 @@
-// Funciones compartidas: sanitizado, git, vtex, checks
 import { execa } from 'execa'
 import chalk from 'chalk'
 

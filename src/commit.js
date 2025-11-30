@@ -1,5 +1,4 @@
-// Comando commit – formatea commits usando contexto de la branch actual
-import inquirer from 'inquirer'
+import { select, input, confirm } from '@inquirer/prompts'
 import chalk from 'chalk'
 import { execa } from 'execa'
 import { ensureCmd } from './lib.js'
@@ -14,7 +13,6 @@ async function getCurrentBranch() {
 }
 
 function parseBranchInfo(branch) {
-  // Formato esperado: tipo/descripcion#TEAM-ID
   const match = branch.match(/^(?:feature|fix|chore|hotfix|refactor)\/[a-z0-9-]+#([A-Z]{2,10})-([0-9]{1,8})$/)
   
   if (!match) {
@@ -30,11 +28,9 @@ function parseBranchInfo(branch) {
 export default async function runCommit(opts = {}) {
   await ensureCmd('git')
   
-  // Obtener la branch actual
   const currentBranch = await getCurrentBranch()
   console.log(chalk.gray(`Branch actual: ${currentBranch}\n`))
   
-  // Parsear info de la branch
   const branchInfo = parseBranchInfo(currentBranch)
   
   if (!branchInfo) {
@@ -43,39 +39,40 @@ export default async function runCommit(opts = {}) {
     console.log(chalk.gray('Continuando sin contexto de equipo/ID...\n'))
   }
   
-  // Preguntar tipo de commit y mensaje
-  const answers = await inquirer.prompt([
-    {
-      name: 'type',
-      type: 'list',
+  let type = opts.type
+  let message = opts.message
+  
+  if (!type) {
+    type = await select({
       message: 'Tipo de cambio:',
-      default: opts.type,
-      choices: ['feat', 'fix', 'refactor', 'style', 'docs', 'test', 'chore'],
-      when: !opts.type
-    },
-    {
-      name: 'message',
-      type: 'input',
+      choices: [
+        { name: 'feat', value: 'feat' },
+        { name: 'fix', value: 'fix' },
+        { name: 'refactor', value: 'refactor' },
+        { name: 'style', value: 'style' },
+        { name: 'docs', value: 'docs' },
+        { name: 'test', value: 'test' },
+        { name: 'chore', value: 'chore' }
+      ]
+    })
+  }
+  
+  if (!message) {
+    message = await input({
       message: 'Descripción del cambio:',
-      when: !opts.message,
       validate: (v) => v.trim().length > 0 || 'Ingresá una descripción válida.'
-    }
-  ])
+    })
+  }
   
-  const type = opts.type || answers.type
-  const message = (opts.message || answers.message || '').trim()
+  message = message.trim()
   
-  // Construir el mensaje del commit
   let commitMessage
   if (branchInfo) {
-    // Formato: [tipo] (TEAM-ID): mensaje
     commitMessage = `[${type}] (${branchInfo.team}-${branchInfo.id}): ${message}`
   } else {
-    // Formato simplificado sin contexto
     commitMessage = `[${type}]: ${message}`
   }
   
-  // Ejecutar git commit directamente
   try {
     await execa('git', ['commit', '-m', commitMessage], { stdio: 'inherit' })
     console.log(chalk.green('\n✔ Commit creado exitosamente'))
