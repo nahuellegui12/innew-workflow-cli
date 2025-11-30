@@ -3,6 +3,7 @@ import { Command } from 'commander'
 import runInit from '../src/init.js'
 import runBranch from '../src/branch.js'
 import runCommit from '../src/commit.js'
+import runLogin from '../src/login.js'
 
 const program = new Command()
   .name('innew')
@@ -32,5 +33,10 @@ program
   .option('-t, --type <type>', 'feat|fix|refactor|style|docs|test|chore')
   .option('-m, --message <message>', 'Descripción del cambio')
   .action(runCommit)
+
+program
+  .command('login')
+  .description('Lee el vendor del manifest.json y ejecuta vtex login')
+  .action(runLogin)
 
 program.parse(process.argv)
