@@ -37,14 +37,12 @@ export default async function runLogin() {
   await ensureCmd('vtex')
   
   try {
-    // Buscar y leer manifest.json
     const manifestPath = findManifest()
     const vendor = readVendor(manifestPath)
     
     console.log(chalk.cyan(`\n→ Vendor encontrado: ${vendor}`))
     console.log(chalk.gray(`→ Ejecutando: vtex login ${vendor}\n`))
     
-    // Ejecutar vtex login con el vendor
     await execa('vtex', ['login', vendor], { stdio: 'inherit' })
     
     console.log(chalk.green('\n✔ Login exitoso'))

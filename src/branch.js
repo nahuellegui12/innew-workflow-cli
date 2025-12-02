@@ -29,15 +29,23 @@ export default async function runBranch(opts = {}) {
     if (opts.last) {
         chosen = recent[0]
     } else {
-        const selectedBranch = await select({
-            message: 'Seleccioná una branch reciente:',
-            pageSize: 5,
-            choices: recent.map((r, idx) => ({
-                name: `${chalk.cyan(r.branch)}  ${chalk.gray(`(${r.workspace})`)}  – ${chalk.dim(new Date(r.date).toLocaleString())}`,
-                value: idx
-            }))
-        })
-        chosen = recent[selectedBranch]
+        try {
+            const selectedBranch = await select({
+                message: 'Seleccioná una branch reciente:',
+                pageSize: 5,
+                choices: recent.map((r, idx) => ({
+                    name: `${chalk.cyan(r.branch)}  ${chalk.gray(`(${r.workspace})`)}  – ${chalk.dim(new Date(r.date).toLocaleString())}`,
+                    value: idx
+                }))
+            })
+            chosen = recent[selectedBranch]
+        } catch (error) {
+            if (error.name === 'ExitPromptError' || error.message?.includes('User force closed') || error.message?.includes('SIGINT')) {
+                console.log(chalk.yellow('\n\nOperación cancelada.'))
+                process.exit(0)
+            }
+            throw error
+        }
     }
 
     const { branch, workspace } = chosen
